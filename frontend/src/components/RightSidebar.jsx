@@ -25,7 +25,7 @@ const RightSidebar = () => {
                         </div>
                     </div>
                     <div>
-                        <button className="px-4 py-2 bg-black hover:outline-offset-1 hover:outline duration-75 transition-all hover:outline-slate-600 font-semibold text-white text-sm rounded-full">Profile</button>
+                        <button className="px-4 py-2 bg-black hover:outline-offset-1 hover:outline transition-all hover:outline-slate-600 font-semibold text-white text-sm rounded-full">Profile</button>
                     </div>
                 </div>
                 {/* second profile */}
@@ -40,7 +40,7 @@ const RightSidebar = () => {
                         </div>
                     </div>
                     <div>
-                        <button className="px-4 py-2 bg-black hover:outline-offset-1 hover:outline duration-75 transition-all hover:outline-slate-600 font-semibold text-white text-sm rounded-full">Profile</button>
+                        <button className="px-4 py-2 bg-black hover:outline-offset-1 hover:outline transition-all hover:outline-slate-600 font-semibold text-white text-sm rounded-full">Profile</button>
                     </div>
                 </div>
                 {/* third profile */}
@@ -55,7 +55,7 @@ const RightSidebar = () => {
                         </div>
                     </div>
                     <div>
-                        <button className="px-4 py-2 bg-black hover:outline-offset-1 hover:outline duration-75 transition-all hover:outline-slate-600 font-semibold text-white text-sm rounded-full">Profile</button>
+                        <button className="px-4 py-2 bg-black hover:outline-offset-1 hover:outline transition-all hover:outline-slate-600 font-semibold text-white text-sm rounded-full">Profile</button>
                     </div>
                 </div>
             </div>

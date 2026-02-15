@@ -1,11 +1,14 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import Login from './Login'
+import Auth from './Auth'
 import Home from './Home'
 import Feed from "./Feed";
 import Profile from "./Profile";
 import Premium from "./Premium";
 import Bookmark from "./Bookmark";
+import SignIn from './SignIn'
+import SignUp from "./SignUp";
+
 
 export default function Body() {
 
@@ -33,8 +36,18 @@ export default function Body() {
             ]
         },
         {
-            path: "/login",
-            element: <Login />
+            path: "/",
+            element: <Auth />,
+            children: [
+                {
+                    path: "/sign-up",
+                    element: <SignUp />
+                },
+                {
+                    path: "/sign-in",
+                    element: <SignIn />
+                }
+            ]
         },
     ])
 
