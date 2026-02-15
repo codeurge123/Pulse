@@ -9,6 +9,7 @@ import { FiUser } from "react-icons/fi";
 import { IoChatboxOutline } from "react-icons/io5";
 import { RiPulseAiFill } from "react-icons/ri";
 import { CiLogout } from "react-icons/ci";
+import { Link, NavLink } from "react-router";
 import { FiUserPlus } from "react-icons/fi";
 
 
@@ -20,12 +21,17 @@ const LeftSidebar = () => {
                 <img width={55} className="ml-3" height={40}  src={logo} alt="pulse" />
             </div>
             <div className="my-4">
-                <div className="flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2">
+                <NavLink to="/"  
+                className={
+                    ({isActive}) => (
+                        isActive ? "flex items-center my-2 bg-gray-100 rounded-full cursor-pointer px-4 py-2" : "flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2"
+                    )
+                }>
                     <div>
                     <FiHome size="24px" />
                     </div>
                     <h1 className="font-semibold text-lg ml-2">Home</h1>
-                </div>
+                </NavLink>
                 <div className="flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2">
                     <div>
                     <FiHash size="24px" />
@@ -56,24 +62,35 @@ const LeftSidebar = () => {
                     </div>
                     <h1 className="font-semibold text-lg ml-2">PulseAI</h1>
                 </div>
-                <div className="flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2">
+                <NavLink to="/fav" className={
+                    ({isActive}) => (
+                        isActive ? "flex items-center my-2 bg-gray-100 rounded-full cursor-pointer px-4 py-2" : "flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2"
+                    )
+                }>
                     <div>
                     <FiBookmark size="24px" />
                     </div>
                     <h1 className="font-semibold text-lg ml-2">Bookmark</h1>
-                </div>
-                <div className="flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2">
+                </NavLink>
+                <NavLink to="/premium" className={
+                    ({isActive}) => (
+                        isActive ? "flex items-center my-2 bg-gray-100 rounded-full cursor-pointer px-4 py-2" : "flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2"
+                    )
+                }>
                     <div>
                    <img width={20} height={18}  src={logo} alt="pulse" />
                     </div>
                     <h1 className="font-semibold text-lg ml-2">Premium</h1>
-                </div>
-                <div className="flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2">
+                </NavLink>
+                <NavLink to="/profile" className={
+                    ({isActive}) => (
+                        isActive ?  "flex items-center my-2 bg-gray-100 rounded-full cursor-pointer px-4 py-2" : "flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2" 
+                    )}>
                     <div>
                     <FiUser size="24px" />
                     </div>
                     <h1 className="font-semibold text-lg ml-2">Profile</h1>
-                </div>
+                </NavLink>
                 <div className="flex fixed bottom-20 items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-14 py-2">
                     <div>
                     <CiLogout size="24px" />
