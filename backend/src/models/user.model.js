@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
                 ref: "User"
             }
         ],
-        default: 0
+        default: []
     },
     following: {
         type: [
@@ -38,13 +38,16 @@ const userSchema = new mongoose.Schema({
                 ref: "User"
             }
         ],
-        default: 0
+        default: []
     },
     avatar: {
         type: String,
         required: true,
     },
     coverImage: {
+        type: String,
+    },
+    refreshToken: {
         type: String,
     }
 },
@@ -54,13 +57,12 @@ const userSchema = new mongoose.Schema({
 
 // pre is a type of middleware
 // middleware hai to next pass karna he karna padhaa gaa
-userSchema.pre('save', async function (next) {
-    if (!this.isModified("password")) return next();
+userSchema.pre('save', async function () {
+    if (!this.isModified("password")) return;
 
     this.password = await bcrypt.hash(this.password, 10);
 
-    next();
-
+    return;
 })
 
 userSchema.methods.isPasswordCorrect = async function (password) {
@@ -101,7 +103,7 @@ userSchema.methods.generateRefreshToken = function () {
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn: REFRESH_TOKEN_EXPIRY,
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
         }
     )
 }

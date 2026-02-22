@@ -1,0 +1,42 @@
+import ApiError from "../utils/ApiError.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import jwt from "jsonwebtoken"
+import { User } from "../models/user.model.js";
+
+import dotenv from "dotenv"
+
+dotenv.config({
+    path: ".env"
+})
+
+// middleware ka sath always next aya ga he aya ga
+const verifyJWT = asyncHandler(async (req, _, next) => {
+    try {
+        // console.log("inside jwt")
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+
+        if (!token) {
+            throw new ApiError(401, "Unauthorized request");
+        }
+
+        const decodedtoken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        console.log(process.env.ACCESS_TOKEN_SECRET);
+
+        const user = await User.findById(decodedtoken?._id).select(
+            "-password -refreshToken"
+        );
+
+        if (!user) {
+            throw new ApiError(401, "Invalid Access Token");
+        }
+
+
+        req.user = user;
+        next();
+
+    } catch (error) {
+        throw new ApiError(401, error?.message || "nvalid Access Token");
+    }
+})
+
+export { verifyJWT }
