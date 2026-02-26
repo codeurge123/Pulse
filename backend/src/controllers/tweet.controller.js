@@ -26,7 +26,15 @@ const createTweet = asyncHandler(async (req, res) => {
 
 })
 
-const deleteTweet = asyncHandler(async (req,res) => {
+const deleteTweet = asyncHandler(async (req, res) => {
+    // req.params se humm post ke id laa raha ho ga
+    const { id } = req.params
+
+    await Tweet.findByIdAndDelete(id);
+    
+    return res.status(200).json(
+        new ApiResponse(200,"Tweet deleted Successfully")
+    ) 
 
 })
 
