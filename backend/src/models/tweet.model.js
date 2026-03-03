@@ -6,13 +6,13 @@ const tweetSchema = new mongoose.Schema({
         required: true
     },
     like: {
-       type: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
-        }
-       ],
-       default: []
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
+            }
+        ],
+        default: []
     },
     bookmark: {
         type: [
@@ -23,9 +23,9 @@ const tweetSchema = new mongoose.Schema({
         ],
         default: []
     },
-    owner : {
+    owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User" 
+        ref: "User"
     }
 },
     {

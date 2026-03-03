@@ -9,7 +9,7 @@ dotenv.config({
     path: ".env"
 })
 
-// middleware ka sath always next aya ga he aya ga
+// middleware ka sath always 'next' aya ga he aya ga
 const verifyJWT = asyncHandler(async (req, _, next) => {
     try {
         // console.log("inside jwt")
@@ -35,7 +35,7 @@ const verifyJWT = asyncHandler(async (req, _, next) => {
         next();
 
     } catch (error) {
-        throw new ApiError(401, error?.message || "nvalid Access Token");
+        throw new ApiError(401, error?.message || "Invalid Access Token");
     }
 })
 
