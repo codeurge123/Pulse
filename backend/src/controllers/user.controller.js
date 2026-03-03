@@ -13,7 +13,7 @@ const generatteAccessAndRefreshToken = async (userId) => {
         const refreshToken = user.generateRefreshToken();
 
         user.refreshToken = refreshToken;
-        await user.save({ validateBeforeSave: false }); 
+        await user.save({ validateBeforeSave: false });
 
         return { accessToken, refreshToken }
 
@@ -115,16 +115,16 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const { username, email, password } = req.body
 
-    if(!(username && email)) {
-        throw new ApiError(401,"Username or email is required");
+    if (!(username && email)) {
+        throw new ApiError(401, "Username or email is required");
     }
 
     const user = await User.findOne({
-       $or: [{ email }, { username }]
+        $or: [{ email }, { username }]
     })
 
-    if(!user) {
-        throw new ApiError(402,"User is not Registered")
+    if (!user) {
+        throw new ApiError(402, "User is not Registered")
     }
 
     const isPasswordValid = await user.isPasswordCorrect(password);
@@ -147,19 +147,19 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
 
-    return res.status(200).cookie("accessToken",accessToken,options).cookie("refreshToken",refreshToken,options).json(
+    return res.status(200).cookie("accessToken", accessToken, options).cookie("refreshToken", refreshToken, options).json(
         new ApiResponse(200, {
             loggedInUser,
             accessToken,
             refreshToken
-        },"User LoggedIn Successfully")
+        }, "User LoggedIn Successfully")
     );
 
 })
 
 
 // logout user : 
-const logoutUser = asyncHandler(async (req,res) => {
+const logoutUser = asyncHandler(async (req, res) => {
     // first clear the refresh token
     // then clear the cookies
     console.log("inside logout user")
@@ -187,8 +187,44 @@ const logoutUser = asyncHandler(async (req,res) => {
 
 });
 
+const bookmarks = asyncHandler(async (req, res) => {
+    const loggedInUserId = req.user._id;
+    const tweetId = req.params.id;
+    const user = await User.findById(loggedInUserId);
+
+    // checking if user already liked the tweet or not
+    if (user.bookmark.includes(tweetId)) {
+        // unbookmark 
+        await User.findByIdAndUpdate(
+            loggedInUserId, 
+            {
+                $pull: {
+                    bookmark: tweetId,
+                }
+            },
+        )
+        return res.status(200).json(
+            new ApiResponse(200, "User unbookmarked your tweet")
+        )
+    }
+    else {
+        // bookmark 
+        await User.findByIdAndUpdate(
+            loggedInUserId,
+            {
+                $push: {
+                    bookmark: tweetId
+                }
+            }
+        )
+        return res.status(200).json(
+            new ApiResponse(200, "User bookmarked your tweet")
+        )
+    }
+
+})
 
 
 
 
-export { RegisterUser, loginUser, logoutUser }
+export { RegisterUser, loginUser, logoutUser, bookmarks }

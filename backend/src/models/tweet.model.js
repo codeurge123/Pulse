@@ -14,15 +14,6 @@ const tweetSchema = new mongoose.Schema({
         ],
         default: []
     },
-    bookmark: {
-        type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User"
-            }
-        ],
-        default: []
-    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"

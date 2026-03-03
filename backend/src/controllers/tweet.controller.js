@@ -31,11 +31,49 @@ const deleteTweet = asyncHandler(async (req, res) => {
     const { id } = req.params
 
     await Tweet.findByIdAndDelete(id);
-    
+
     return res.status(200).json(
-        new ApiResponse(200,"Tweet deleted Successfully")
-    ) 
+        new ApiResponse(200, "Tweet deleted Successfully")
+    )
 
 })
 
-export { createTweet, deleteTweet }
+const likeDislike = asyncHandler(async (req, res) => {
+    const loggedInUserId = req.user._id;
+    const tweetId = req.params.id;
+    const tweet = await Tweet.findById(tweetId);
+
+    // checking if user already liked the tweet or not
+    if (tweet.like.includes(loggedInUserId)) {
+        // dislike 
+        await Tweet.findByIdAndUpdate(
+            tweetId,
+            {
+                $pull: {
+                    like: loggedInUserId,
+                }
+            },
+        )
+        return res.status(200).json(
+            new ApiResponse(200, "User dislike your tweet")
+        )
+    }
+    else {
+        // like 
+        await Tweet.findByIdAndUpdate(
+            tweetId,
+            {
+                $push: {
+                    like: loggedInUserId
+                }
+            }
+        )
+        return res.status(200).json(
+            new ApiResponse(200, "User like your tweet")
+        )
+    }
+
+})
+
+
+export { createTweet, deleteTweet, likeDislike }
