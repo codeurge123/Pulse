@@ -196,7 +196,7 @@ const bookmarks = asyncHandler(async (req, res) => {
     if (user.bookmark.includes(tweetId)) {
         // unbookmark 
         await User.findByIdAndUpdate(
-            loggedInUserId, 
+            loggedInUserId,
             {
                 $pull: {
                     bookmark: tweetId,
@@ -224,7 +224,19 @@ const bookmarks = asyncHandler(async (req, res) => {
 
 })
 
+const getUserProfile = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+
+    const user = await User.findById(id).select(
+        "-password -refreshToken"
+    )
+
+    return res.status(200).json(
+        new ApiResponse(200,user,"User details fetched successfully")
+    )
+})
 
 
 
-export { RegisterUser, loginUser, logoutUser, bookmarks }
+
+export { RegisterUser, loginUser, logoutUser, bookmarks, getUserProfile }
