@@ -75,5 +75,43 @@ const likeDislike = asyncHandler(async (req, res) => {
 
 })
 
+const getAllTweet = asyncHandler(async (req,res) => {
+    // loggedInUser + following Tweets
+    const id = req.params.id;
+    const loggedInUser = await User.findById(id);
+    // through below line we want to say that agar tweet model mein jin jin tweet ka owner id loggedin user wali hai vo tweet la kar de do humko.
+    const loggedInUserTweets = await Tweet.find({owner: id});
 
-export { createTweet, deleteTweet, likeDislike }
+    // using promise b/c humko ab array par traverse karna padd rh hai and uss se humko tweet nikal na hai
+    const followingUserTweet = await Promise.all(loggedInUser.following.map((otherUserId) => {
+        return Tweet.find({owner: otherUserId})
+    }))
+
+    return res.status(200).json(
+        new ApiResponse(200,{
+            tweets: loggedInUserTweets.concat(...followingUserTweet)
+        },"All Tweet get fetched successfully")
+    )
+
+})
+
+const followingtweet = asyncHandler(async (req,res) => {
+    // loggedInUser + following Tweets
+    const id = req.user._id;
+    const loggedInUser = await User.findById(id);
+
+    // using promise b/c humko ab array par traverse karna padd rh hai and uss se humko tweet nikal na hai
+    const followingUserTweet = await Promise.all(loggedInUser.following.map((otherUserId) => {
+        return Tweet.find({owner: otherUserId})
+    }))
+
+    return res.status(200).json(
+        new ApiResponse(200,{
+            tweets: [].concat(...followingUserTweet)
+        },"following user Tweet get fetched successfully")
+    )
+
+})
+
+
+export { createTweet, deleteTweet, likeDislike, getAllTweet, followingtweet}

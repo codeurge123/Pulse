@@ -192,7 +192,7 @@ const bookmarks = asyncHandler(async (req, res) => {
     const tweetId = req.params.id;
     const user = await User.findById(loggedInUserId);
 
-    // checking if user already liked the tweet or not
+    // checking if user already bookmark the tweet or not
     if (user.bookmark.includes(tweetId)) {
         // unbookmark 
         await User.findByIdAndUpdate(
@@ -232,11 +232,95 @@ const getUserProfile = asyncHandler(async (req, res) => {
     )
 
     return res.status(200).json(
-        new ApiResponse(200,user,"User details fetched successfully")
+        new ApiResponse(200, user, "User details fetched successfully")
     )
+})
+
+const getOtherUser = asyncHandler(async (req, res) => {
+    const { id } = req.params; // fetching current user id from req.params
+
+    // for fetching other users we are using the not show the current user as other user and this we done using "$ne" it simply means fetch the users by id other than the current user
+    const otherUsers = await User.find({
+        _id: {
+            $ne: id
+        }
+    }).select(
+        "-password -refreshToken" 
+    ); 
+
+    if(!otherUsers) {
+        throw new ApiError(401,"Currently there is no other users exists !!")
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200,otherUsers,"other users successfully get fetched")
+    )
+
+})
+
+
+const follow = asyncHandler(async (req,res) => {
+    const  loggedInUserId = req.user._id;  
+    const userId = req.params.id 
+    const loggedInUser = await User.findById(loggedInUserId) // patel
+    const user = await User.findById(userId); // keshav
+
+    // yaha par humm check kar rh hai ke keshav ke follower mein patel phala se hai ya nhi
+    if(!user.followers.includes(loggedInUserId)) {
+        await user.updateOne({
+            $push: {
+                followers: loggedInUserId
+            }
+        })
+        await loggedInUser.updateOne({
+            $push: {
+                following: userId
+            }
+        })
+    }
+    else {
+        res.status(400).json(
+            new ApiResponse(400,`${loggedInUser.name} already followed to ${user.name}`)
+        )
+    }
+
+    res.status(200).json(
+        new ApiResponse(200,`${loggedInUser.name} just follow to ${user.name}`)
+    )
+
+})
+
+const unfollow = asyncHandler(async (req,res) => {
+    const loggedInUserId = req.user._id;
+    const userId = req.params.id;
+
+    const loggedInUser = await User.findById(loggedInUserId)
+    const user = await User.findById(userId);
+
+    if(user.followers.includes(loggedInUserId)) {
+        await user.updateOne({
+            $pull : {
+                followers: loggedInUserId
+            }
+        })
+        await loggedInUser.updateOne({
+            $pull: {
+                following: userId
+            }
+        })
+    }
+    else {
+        return res.status(400).json(
+            new ApiResponse(400,`${loggedInUser.name} already unfollowed to ${user.name}`)
+        )
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200,`${loggedInUser.name} just unfollow to ${user.name}`)
+    )
+
 })
 
 
 
-
-export { RegisterUser, loginUser, logoutUser, bookmarks, getUserProfile }
+export { RegisterUser, loginUser, logoutUser, bookmarks, getUserProfile, getOtherUser,follow,unfollow }
