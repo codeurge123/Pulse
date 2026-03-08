@@ -49,33 +49,33 @@ const RegisterUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "User Already exist !!")
     }
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
+    // const avatarLocalPath = req.files?.avatar[0]?.path;
 
-    console.log(avatarLocalPath);
+    // console.log(avatarLocalPath);
 
-    let coverImageLocalPath;
-    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
-        coverImageLocalPath = req.files.coverImage[0].path;
-    }
+    // let coverImageLocalPath;
+    // if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    //     coverImageLocalPath = req.files.coverImage[0].path;
+    // }
 
-    if (!avatarLocalPath) {
-        throw new ApiError(401, "Avatar is required");
-    }
-
-
-    const avatar = await uploadOnCloudinary(avatarLocalPath);
-
-    console.log(avatar);
-
-    if (!avatar) {
-        throw new ApiError(500, "Error while uploading on cloudinary !!");
-    }
+    // if (!avatarLocalPath) {
+    //     throw new ApiError(401, "Avatar is required");
+    // }
 
 
-    let coverImage;
-    if (coverImageLocalPath) {
-        coverImage = await uploadOnCloudinary(coverImageLocalPath);
-    }
+    // const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+    // console.log(avatar);
+
+    // if (!avatar) {
+    //     throw new ApiError(500, "Error while uploading on cloudinary !!");
+    // }
+
+
+    // let coverImage;
+    // if (coverImageLocalPath) {
+    //     coverImage = await uploadOnCloudinary(coverImageLocalPath);
+    // }
 
 
     const user = await User.create({
@@ -83,8 +83,8 @@ const RegisterUser = asyncHandler(async (req, res) => {
         email,
         username: username.toLowerCase(),
         password,
-        avatar: avatar.url,
-        coverImage: coverImage?.url || "",
+        // avatar: avatar.url,
+        // coverImage: coverImage?.url || "",
     })
 
 

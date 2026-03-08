@@ -42,10 +42,11 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        required: true,
+        default: ""
     },
     coverImage: {
         type: String,
+        default: ""
     },
     refreshToken: {
         type: String,
