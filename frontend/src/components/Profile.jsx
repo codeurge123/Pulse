@@ -1,12 +1,24 @@
 import React from "react";
 import { IoArrowBack } from "react-icons/io5";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import Avatar from "react-avatar";
+import { useSelector } from "react-redux";
+import useGetProfile from "../hooks/useGetProfile";
 
 export default function Profile() {
+
+    // "useSelector" ka use hota hai jab bhe redux sa kuch data lekar ana hota hai.
+    // console.log("ye simple user hai ", user)
+    // console.log("Profile wali id", user?._id);
+    // console.log(profile)
+    const { id } = useParams();
+    useGetProfile(id);
+    const { profile } = useSelector(store => store.user)
+
+
     return (
         <div className="w-full md:w-[60%] lg:w-[50%] mx-auto min-h-screen border-x border-slate-200">
-            
+
             {/* Header */}
             <div className="flex items-center p-3">
                 <Link
@@ -15,7 +27,7 @@ export default function Profile() {
                     <IoArrowBack size="24px" />
                 </Link>
                 <div className="ml-4">
-                    <h1 className="font-semibold text-xl md:text-2xl">Bansal</h1>
+                    <h1 className="font-semibold text-xl md:text-2xl">{profile?.name}</h1>
                     <p className="text-sm text-gray-500 font-extralight">10 posts</p>
                 </div>
             </div>
@@ -47,11 +59,11 @@ export default function Profile() {
 
             {/* User Info */}
             <div className="px-4 mt-4">
-                <h1 className="font-bold text-lg md:text-xl">Bansal</h1>
-                <p className="font-extralight text-gray-600">@yashbansal</p>
+                <h1 className="font-bold text-lg md:text-xl">{profile?.name}</h1>
+                <p className="font-extralight text-gray-600">{`@${profile?.username}`}</p>
             </div>
-            <div className="m-4 text-sm">
-                Discipline 🔥🔥
+            <div className="m-4 text-sm font-light">
+                I am a developer
             </div>
 
         </div>

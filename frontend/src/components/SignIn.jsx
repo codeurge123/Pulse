@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { data, NavLink, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { USER_API_END_POINT } from "../utils/constant";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { getUser } from "../redux/userslice";
 
 export default function SignIn() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
         username: "",
@@ -76,6 +79,9 @@ export default function SignIn() {
                 // eska through toast animation lekar aya ga
                 toast.success(res.data.message)
                 navigate("/");
+                dispatch(getUser(res?.data?.data?.loggedInUser))
+                // console.log(res.data.data.loggedInUser) // --> just for testing
+                // console.log(res.data.data.loggedInUser._id) // --> just for testing
             }
 
         } catch (err) {
