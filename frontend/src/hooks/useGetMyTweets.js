@@ -2,9 +2,9 @@ import axios from "axios"
 import { TWEET_API_END_POINT } from "../utils/constant"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { getProfile } from "../redux/userslice"
+import { getAllTweets } from "../redux/tweetslice"
 
-const useGetProfile = (id) => {
+const useGetTweets = (id) => {
 
     const dispatch = useDispatch();
 
@@ -19,8 +19,8 @@ const useGetProfile = (id) => {
                     `${TWEET_API_END_POINT}/alltweets/${id}`,
                     { withCredentials: true }
                 )
-                // console.log(res?.data?.data);
-                dispatch(getAllTweets(res?.data?.tweets))
+                console.log(res?.data?.data?.tweets);
+                dispatch(getAllTweets(res?.data?.data?.tweets))
 
             } catch (error) {
                 console.log(error)
@@ -33,4 +33,4 @@ const useGetProfile = (id) => {
 
 }
 
-export default useGetProfile;
+export default useGetTweets;

@@ -17,7 +17,12 @@ const tweetSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-    }
+    },
+    // ye tarika shi nhi hai -->. instead of this use populate()
+    // userDetails: {
+    //     type: Array,
+    //     default: []
+    // }
 },
     {
         timestamps: true

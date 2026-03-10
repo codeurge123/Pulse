@@ -6,14 +6,16 @@ import { Outlet } from "react-router";
 import useOtherUsers from "../hooks/useOtherUsers";
 import { useSelector } from "react-redux";
 import store from "../redux/store";
+import useGetTweets  from '../hooks/useGetMyTweets'
 
 
 const Home = () => {
 
     // implement custom hook (useOtherUsers) here
 
-    const { user , otherUsers} = useSelector(store => store.user)
+    const { user, otherUsers } = useSelector(store => store.user)
     useOtherUsers(user?._id);
+    useGetTweets(user?._id);
 
     return (
         <div className="flex justify-between mx-auto w-[70%]">
