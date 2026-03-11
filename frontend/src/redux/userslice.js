@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { act } from "react";
 
 // now lets give the name to slice : 
 const userSlice = createSlice({
@@ -19,9 +20,19 @@ const userSlice = createSlice({
         },
         getProfile: (state,action) => {
             state.profile = action.payload
+        },
+        followingUpdate: (state,action) => {
+            if(state.user.following.includes(action.payload)) {
+                // unfollow
+                state.user.following = state.user.following.filter((itemId) => itemId !== action.payload)
+            }
+            else {
+                // follow
+                state.user.following.push(action.payload)
+            }
         }
     }
 })
 
-export const { getOtherUser, getUser, getProfile } = userSlice.actions
+export const { getOtherUser, getUser, getProfile, followingUpdate } = userSlice.actions
 export default userSlice.reducer;

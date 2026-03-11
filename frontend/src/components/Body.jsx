@@ -8,6 +8,11 @@ import Premium from "./Premium";
 import Bookmark from "./Bookmark";
 import SignIn from './SignIn'
 import SignUp from "./SignUp";
+import PulseAI from './PulseAI'
+import ProtectedRoute from "./ProtectedRoute";
+import Chat from "./Chat";
+import Follow from "./Follow";
+import EditProfile from "./EditProfile";
 
 
 export default function Body() {
@@ -15,24 +20,76 @@ export default function Body() {
     const appRouter = createBrowserRouter([
         {
             path: "/",
-            element: <Home />,
+            element: (
+                <ProtectedRoute>
+                    <Home />
+                </ProtectedRoute>
+            ),
             children: [
                 {
                     path: "/",
-                    element: <Feed />
+                    element: (
+                        <ProtectedRoute>
+                            <Feed />
+                        </ProtectedRoute>
+                    )
                 },
                 {
                     path: "/profile/:id",
-                    element: <Profile />
+                    element: (
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    )
                 },
                 {
                     path: "/premium",
-                    element: <Premium />
+                    element: (
+                        <ProtectedRoute>
+                            <Premium />
+                        </ProtectedRoute>
+                    )
                 },
                 {
                     path: "/fav",
-                    element: <Bookmark />
-                }
+                    element: (
+                        <ProtectedRoute>
+                            <Bookmark />
+                        </ProtectedRoute>
+                    )
+                },
+                {
+                    path: "/pulse-ai",
+                    element: (
+                        <ProtectedRoute>
+                            <PulseAI />
+                        </ProtectedRoute>
+                    )
+                },
+                {
+                    path: "/chat",
+                    element: (
+                        <ProtectedRoute>
+                            <Chat />
+                        </ProtectedRoute>
+                    )
+                },
+                {
+                    path: "/user-to-follow",
+                    element: (
+                        <ProtectedRoute>
+                            <Follow />
+                        </ProtectedRoute>
+                    )
+                },
+                {
+                    path: "/edit-profile",
+                    element: (
+                        <ProtectedRoute>
+                            <EditProfile />
+                        </ProtectedRoute>
+                    )
+                },
             ]
         },
         {
@@ -53,7 +110,7 @@ export default function Body() {
 
     return (
         <div>
-            <RouterProvider router={appRouter}/>
+            <RouterProvider router={appRouter} />
         </div>
     )
 }

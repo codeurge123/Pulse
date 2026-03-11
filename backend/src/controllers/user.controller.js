@@ -138,7 +138,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const loggedInUser = await User.findById(user._id).select(
         "-password -refreshToken"
-    )
+    );
 
 
     const options = {
@@ -186,43 +186,6 @@ const logoutUser = asyncHandler(async (req, res) => {
     )
 
 });
-
-const bookmarks = asyncHandler(async (req, res) => {
-    const loggedInUserId = req.user._id;
-    const tweetId = req.params.id;
-    const user = await User.findById(loggedInUserId);
-
-    // checking if user already bookmark the tweet or not
-    if (user.bookmark.includes(tweetId)) {
-        // unbookmark 
-        await User.findByIdAndUpdate(
-            loggedInUserId,
-            {
-                $pull: {
-                    bookmark: tweetId,
-                }
-            },
-        )
-        return res.status(200).json(
-            new ApiResponse(200, "User unbookmarked your tweet")
-        )
-    }
-    else {
-        // bookmark 
-        await User.findByIdAndUpdate(
-            loggedInUserId,
-            {
-                $push: {
-                    bookmark: tweetId
-                }
-            }
-        )
-        return res.status(200).json(
-            new ApiResponse(200, "User bookmarked your tweet")
-        )
-    }
-
-})
 
 const getUserProfile = asyncHandler(async (req, res) => {
     const id = req.params.id;
@@ -321,6 +284,33 @@ const unfollow = asyncHandler(async (req,res) => {
 
 })
 
+const updateUserDetails = asyncHandler(async (req,res) => {
+    // get updated info from frontend 
+    // validate info
+    // set updated info in database
+    // return res
+
+    const {name , bio} = req.body;
 
 
-export { RegisterUser, loginUser, logoutUser, bookmarks, getUserProfile, getOtherUser,follow,unfollow }
+    const user  = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                name: name,
+                bio: bio,
+            },
+        },
+        {
+            new: true,
+        }
+    ).select("-password -refreshToken");
+
+    return res.status(200).json(
+        new ApiResponse(200,user,"Information Updated Successfully")
+    )
+})
+
+
+
+export { RegisterUser, loginUser, logoutUser, getUserProfile, getOtherUser,follow,unfollow, updateUserDetails}

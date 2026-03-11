@@ -9,7 +9,7 @@ const Feed = () => {
     const {tweets} = useSelector(store => store.tweet);
 
     return (
-        <div className="w-[50%] min-h-screen border-r-2 border-l-2 border-slate-200">
+        <div className="w-[52%] min-h-screen border-r-2 border-l-2 border-slate-200 relative left-80">
             <div>
                 <CreatePost />
                 {

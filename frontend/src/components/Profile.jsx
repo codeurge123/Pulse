@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import Avatar from "react-avatar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useGetProfile from "../hooks/useGetProfile";
+import axios from "axios";
+import { USER_API_END_POINT } from "../utils/constant";
+import toast from "react-hot-toast";
+import { getRefresh } from "../redux/tweetslice";
+import { followingUpdate, getUser } from "../redux/userslice";
+import Tweet from "./Tweet";
+import store from "../redux/store";
 
 export default function Profile() {
 
@@ -11,9 +18,63 @@ export default function Profile() {
     // console.log("ye simple user hai ", user)
     // console.log("Profile wali id", user?._id);
     // console.log(profile)
+
     const { id } = useParams();
     useGetProfile(id);
-    const { profile } = useSelector(store => store.user)
+    const { profile, user } = useSelector(store => store.user)
+    const dispatch = useDispatch();
+    const { tweets } = useSelector(store => store.tweet);
+    const navigate = useNavigate();
+
+    const editprofileHandler = () => {
+        navigate("/edit-profile")
+    }
+
+    const userTweets = tweets?.filter(
+        (tweet) => tweet?.owner?._id === profile?._id
+    );
+
+
+    const followUnfollowHandler = async () => {
+        if (user.following.includes(id)) {
+            // unfollow
+            try {
+                const res = await axios.put(`${USER_API_END_POINT}/unfollow/${id}`, {}, {
+                    withCredentials: true
+                })
+
+                console.log(res);
+                if (res?.data?.success) {
+                    toast.success(res?.data?.data)
+                    dispatch(followingUpdate(id));
+                }
+                dispatch(getRefresh());
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else {
+            // follow
+            try {
+                const res = await axios.put(`${USER_API_END_POINT}/follow/${id}`, {}, {
+                    withCredentials: true
+                })
+
+                console.log(res);
+                if (res?.data?.success) {
+                    toast.success(res?.data?.data)
+                    dispatch(followingUpdate(id));
+                    // dispatch(getRefresh());
+                }
+                // ye disptach sirf es liya kara hai ku ke we want update in real time so jasia he follow kara to tweets donbara aya gaa 
+                dispatch(getRefresh());
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 
 
     return (
@@ -28,7 +89,7 @@ export default function Profile() {
                 </Link>
                 <div className="ml-4">
                     <h1 className="font-semibold text-xl md:text-2xl">{profile?.name}</h1>
-                    <p className="text-sm text-gray-500 font-extralight">10 posts</p>
+                    <p className="text-sm text-gray-500 font-extralight">{userTweets?.length} posts</p>
                 </div>
             </div>
 
@@ -52,9 +113,15 @@ export default function Profile() {
 
             {/* Edit Button */}
             <div className="flex justify-end mt-6 px-4">
-                <button className="px-4 py-1 border border-gray-300 text-gray-800 font-semibold rounded-full hover:bg-gray-100">
+                {user?._id === profile?._id ? <button 
+                onClick={editprofileHandler}
+                className="px-4 py-1 border border-gray-300 text-gray-800 font-semibold rounded-full hover:bg-gray-100 ">
                     Edit Profile
-                </button>
+                </button> : <button
+                    onClick={followUnfollowHandler}
+                    className={user.following.includes(id) ? `px-5 py-1 border border-slate-500 text-gray-800 font-semibold rounded-full hover:bg-gray-100` : `px-5 py-1 bg-black text-white font-light rounded-full hover:scale-105 transition-all duration-100`}>
+                    {user.following.includes(id) ? "Following" : "Follow"}
+                </button>}
             </div>
 
             {/* User Info */}
@@ -62,9 +129,17 @@ export default function Profile() {
                 <h1 className="font-bold text-lg md:text-xl">{profile?.name}</h1>
                 <p className="font-extralight text-gray-600">{`@${profile?.username}`}</p>
             </div>
-            <div className="m-4 text-sm font-light">
-                I am a developer
+            <div className="m-4 text-sm  font-light">
+                {profile?.bio}
             </div>
+
+            <div className="px-4 mt-10 font-semibold text-xl border-b">
+                {userTweets?.length} Posts
+            </div>
+
+            {userTweets?.map((tweet) => (
+                <Tweet key={tweet?._id} tweet={tweet} />
+            ))}
 
         </div>
     );

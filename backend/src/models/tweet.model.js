@@ -18,6 +18,15 @@ const tweetSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
+    bookmark: {
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
+            }
+        ],
+        default: []
+    },
     // ye tarika shi nhi hai -->. instead of this use populate()
     // userDetails: {
     //     type: Array,

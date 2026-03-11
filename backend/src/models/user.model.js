@@ -51,15 +51,9 @@ const userSchema = new mongoose.Schema({
     refreshToken: {
         type: String,
     },
-    bookmark: {
-        type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Tweet"
-            }
-        ],
-        default: []
-    },
+    bio : {
+        type: String,
+    }
 },
     {
         timestamps: true,

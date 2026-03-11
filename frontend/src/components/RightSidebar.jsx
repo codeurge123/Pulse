@@ -5,13 +5,13 @@ import { Link } from "react-router";
 
 const RightSidebar = ({ otherUsers }) => {
     return (
-        <div className="w-[25%]">
+        <div className="w-[18%] fixed right-44">
             <div className="p-2 mt-4 text-gray-500 bg-gray-100 rounded-full outline-none flex items-center">
                 <CiSearch size="22px" />
                 <input type="text" className="ml-2 bg-transparent outline-none px-2" placeholder="Search" />
             </div>
             <div className="p-4 bg-gray-100 rounded-2xl my-4">
-                <h1 className="font-bold text-xl mb-4">Who to follow</h1>
+                <h1 className="font-bold text-xl mb-4">All Users</h1>
 
                 {/* Profiles of other users */}
                 {

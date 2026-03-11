@@ -76,6 +76,45 @@ const likeDislike = asyncHandler(async (req, res) => {
 
 })
 
+
+const bookmarks = asyncHandler(async (req, res) => {
+    const loggedInUserId = req.user._id;
+    const tweetId = req.params.id;
+    const tweet = await Tweet.findById(tweetId);
+
+    // checking if user already bookmark the tweet or not
+    if (tweet.bookmark.includes(loggedInUserId)) {
+        // unbookmark 
+        await Tweet.findByIdAndUpdate(
+            tweetId,
+            {
+                $pull: {
+                    bookmark: loggedInUserId,
+                }
+            },
+        )
+        return res.status(200).json(
+            new ApiResponse(200, "User unbookmarked your tweet")
+        )
+    }
+    else {
+        // bookmark 
+        await Tweet.findByIdAndUpdate(
+            tweetId,
+            {
+                $push: {
+                    bookmark: loggedInUserId
+                }
+            }
+        )
+        return res.status(200).json(
+            new ApiResponse(200, "User bookmarked your tweet")
+        )
+    }
+
+})
+
+
 const getAllTweet = asyncHandler(async (req, res) => {
     // loggedInUser + following Tweets
     const id = req.params.id;
@@ -103,16 +142,16 @@ const followingtweet = asyncHandler(async (req, res) => {
 
     // using promise b/c humko ab array par traverse karna padd rh hai and uss se humko tweet nikal na hai
     const followingUserTweet = await Promise.all(loggedInUser.following.map((otherUserId) => {
-        return Tweet.find({ owner: otherUserId })
+         return Tweet.find({owner: otherUserId}).populate("owner", "-password -refreshToken"); 
     }))
 
     return res.status(200).json(
         new ApiResponse(200, {
             tweets: [].concat(...followingUserTweet)
-        }, "following user Tweet get fetched successfully")
+        }, "Fetched Following User Tweets")
     )
 
 })
 
 
-export { createTweet, deleteTweet, likeDislike, getAllTweet, followingtweet }
+export { createTweet, deleteTweet, likeDislike, getAllTweet, followingtweet, bookmarks }
