@@ -6,11 +6,18 @@ import { USER_API_END_POINT } from "../utils/constant";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { getUser } from "../redux/userslice";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
+import { getRefresh } from "../redux/tweetslice";
 
 export default function SignIn() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const { loginWithRedirect } = useAuth0();
+
+
 
     const [formData, setFormData] = useState({
         username: "",
@@ -170,6 +177,27 @@ export default function SignIn() {
                     Sign Up
                 </NavLink>
             </p>
+
+            <div className="flex items-center my-4">
+                <div className="flex-grow border-t"></div>
+                <span className="mx-3 text-gray-500 text-sm">OR</span>
+                <div className="flex-grow border-t"></div>
+            </div>
+
+            <button
+                onClick={() => {
+                    // console.log("clicked")
+                    loginWithRedirect({
+                        authorizationParams: {
+                            connection: "google-oauth2"
+                        }
+                    })
+                }
+                } className="border py-3 rounded-lg w-full hover:bg-gray-50 transition"
+            >
+                Continue with Google
+            </button>
+
         </>
     );
 }

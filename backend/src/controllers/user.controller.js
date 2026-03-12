@@ -158,6 +158,58 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 
+const auth0Login = asyncHandler(async (req, res) => {
+
+    console.log("inside auth0 login");
+
+    const { email, name } = req.body;
+
+    if (!email) {
+        throw new ApiError(400, "Email not received from frontend");
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+        const username = email.split("@")[0];
+
+        user = await User.create({
+            name,
+            email,
+            username,
+            password: "auth0_user"
+        });
+    }
+
+    const { accessToken, refreshToken } =
+        await generatteAccessAndRefreshToken(user._id);
+
+    const loggedInUser = await User.findById(user._id).select(
+        "-password -refreshToken"
+    );
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    };
+
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            new ApiResponse(
+                200,
+                {
+                    loggedInUser,
+                    accessToken,
+                    refreshToken
+                },
+                "User logged in with Google successfully"
+            )
+        );
+});
+
 // logout user : 
 const logoutUser = asyncHandler(async (req, res) => {
     // first clear the refresh token
@@ -208,28 +260,28 @@ const getOtherUser = asyncHandler(async (req, res) => {
             $ne: id
         }
     }).select(
-        "-password -refreshToken" 
-    ); 
+        "-password -refreshToken"
+    );
 
-    if(!otherUsers) {
-        throw new ApiError(401,"Currently there is no other users exists !!")
+    if (!otherUsers) {
+        throw new ApiError(401, "Currently there is no other users exists !!")
     }
 
     return res.status(200).json(
-        new ApiResponse(200,otherUsers,"other users successfully get fetched")
+        new ApiResponse(200, otherUsers, "other users successfully get fetched")
     )
 
 })
 
 
-const follow = asyncHandler(async (req,res) => {
-    const  loggedInUserId = req.user._id;  
-    const userId = req.params.id 
+const follow = asyncHandler(async (req, res) => {
+    const loggedInUserId = req.user._id;
+    const userId = req.params.id
     const loggedInUser = await User.findById(loggedInUserId) // patel
     const user = await User.findById(userId); // keshav
 
     // yaha par humm check kar rh hai ke keshav ke follower mein patel phala se hai ya nhi
-    if(!user.followers.includes(loggedInUserId)) {
+    if (!user.followers.includes(loggedInUserId)) {
         await user.updateOne({
             $push: {
                 followers: loggedInUserId
@@ -243,26 +295,26 @@ const follow = asyncHandler(async (req,res) => {
     }
     else {
         res.status(400).json(
-            new ApiResponse(400,`${loggedInUser.name} already followed to ${user.name}`)
+            new ApiResponse(400, `${loggedInUser.name} already followed to ${user.name}`)
         )
     }
 
     res.status(200).json(
-        new ApiResponse(200,`${loggedInUser.name} just follow to ${user.name}`)
+        new ApiResponse(200, `${loggedInUser.name} just follow to ${user.name}`)
     )
 
 })
 
-const unfollow = asyncHandler(async (req,res) => {
+const unfollow = asyncHandler(async (req, res) => {
     const loggedInUserId = req.user._id;
     const userId = req.params.id;
 
     const loggedInUser = await User.findById(loggedInUserId)
     const user = await User.findById(userId);
 
-    if(user.followers.includes(loggedInUserId)) {
+    if (user.followers.includes(loggedInUserId)) {
         await user.updateOne({
-            $pull : {
+            $pull: {
                 followers: loggedInUserId
             }
         })
@@ -274,26 +326,26 @@ const unfollow = asyncHandler(async (req,res) => {
     }
     else {
         return res.status(400).json(
-            new ApiResponse(400,`${loggedInUser.name} already unfollowed to ${user.name}`)
+            new ApiResponse(400, `${loggedInUser.name} already unfollowed to ${user.name}`)
         )
     }
 
     return res.status(200).json(
-        new ApiResponse(200,`${loggedInUser.name} just unfollow to ${user.name}`)
+        new ApiResponse(200, `${loggedInUser.name} just unfollow to ${user.name}`)
     )
 
 })
 
-const updateUserDetails = asyncHandler(async (req,res) => {
+const updateUserDetails = asyncHandler(async (req, res) => {
     // get updated info from frontend 
     // validate info
     // set updated info in database
     // return res
 
-    const {name , bio} = req.body;
+    const { name, bio } = req.body;
 
 
-    const user  = await User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set: {
@@ -307,10 +359,10 @@ const updateUserDetails = asyncHandler(async (req,res) => {
     ).select("-password -refreshToken");
 
     return res.status(200).json(
-        new ApiResponse(200,user,"Information Updated Successfully")
+        new ApiResponse(200, user, "Information Updated Successfully")
     )
 })
 
 
 
-export { RegisterUser, loginUser, logoutUser, getUserProfile, getOtherUser,follow,unfollow, updateUserDetails}
+export { RegisterUser, loginUser, logoutUser, getUserProfile, getOtherUser, follow, unfollow, updateUserDetails, auth0Login }

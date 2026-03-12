@@ -4,10 +4,16 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { USER_API_END_POINT } from "../utils/constant";
 import toast from "react-hot-toast";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getUser } from "../redux/userslice";
 
 export default function SignUp() {
 
     const navigate = useNavigate();
+    const { loginWithRedirect } = useAuth0();
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -22,6 +28,7 @@ export default function SignUp() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
 
     const handleChange = (e) => {
         setFormData({
@@ -195,6 +202,25 @@ export default function SignUp() {
                     Sign In
                 </NavLink>
             </p>
+
+            <div className="flex items-center my-4">
+                <div className="flex-grow border-t"></div>
+                <span className="mx-3 text-gray-500 text-sm">OR</span>
+                <div className="flex-grow border-t"></div>
+            </div>
+
+            <button
+                onClick={() =>
+                    loginWithRedirect({
+                        authorizationParams: {
+                            connection: "google-oauth2"
+                        }
+                    })
+                }
+                className="border py-3 rounded-lg w-full hover:bg-gray-50 transition"
+            >
+                Continue with Google
+            </button>
         </>
     );
 }
