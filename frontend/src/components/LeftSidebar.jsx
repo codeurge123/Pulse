@@ -45,6 +45,7 @@ const LeftSidebar = () => {
                 dispatch(getOtherUser(null));
                 dispatch(getProfile(null));
                 dispatch(getAllTweets(null))
+                localStorage.removeItem("auth_provider");
 
                 toast.success(res?.data?.message);
             }

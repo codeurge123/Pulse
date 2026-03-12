@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { getUser } from "../redux/userslice";
-import toast from "react-hot-toast";
 import { USER_API_END_POINT } from "../utils/constant";
 
 export default function AuthHandler() {
@@ -11,22 +10,27 @@ export default function AuthHandler() {
     const { isAuthenticated, isLoading, getAccessTokenSilently, user } = useAuth0();
     const dispatch = useDispatch();
 
+    const hasSentToken = useRef(false);
+
     useEffect(() => {
 
-        if (isLoading) return;          // wait until Auth0 finishes checking session
-        if (!isAuthenticated) return;   // user not logged in
+        // check login provider
+        const provider = localStorage.getItem("auth_provider");
+
+        // stop if login was not done using Google/Auth0
+        if (provider !== "auth0") return;
+
+        if (isLoading) return;
+        if (!isAuthenticated) return;
+        if (hasSentToken.current) return;
 
         const sendTokenToBackend = async () => {
 
             try {
 
-                console.log("Sending request to backend...");
+                hasSentToken.current = true;
 
-                // get Auth0 access token
                 const token = await getAccessTokenSilently();
-
-                console.log("TOKEN:", token);
-                console.log("AUTH0 USER:", user);
 
                 const res = await axios.post(
                     `${USER_API_END_POINT}/auth0-login`,
@@ -42,22 +46,12 @@ export default function AuthHandler() {
                     }
                 );
 
-                console.log("BACKEND RESPONSE:", res);
-
                 if (res?.data?.success) {
-                    toast.success("Google login successful");
-
                     dispatch(getUser(res?.data?.data?.loggedInUser));
                 }
 
             } catch (error) {
-
-                console.log("Auth0 login failed");
-
-                console.log("Full error:", error);
-                console.log("Axios response:", error.response);
-                console.log("Backend message:", error.response?.data);
-
+                console.log("Auth0 login failed:", error);
             }
 
         };

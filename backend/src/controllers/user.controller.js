@@ -160,7 +160,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const auth0Login = asyncHandler(async (req, res) => {
 
-    console.log("inside auth0 login");
+    // console.log("inside auth0 login");
 
     const { email, name } = req.body;
 
@@ -177,12 +177,11 @@ const auth0Login = asyncHandler(async (req, res) => {
             name,
             email,
             username,
-            password: "auth0_user"
+            password: process.env.AUTH_PASSCODE
         });
     }
 
-    const { accessToken, refreshToken } =
-        await generatteAccessAndRefreshToken(user._id);
+    const { accessToken, refreshToken } = await generatteAccessAndRefreshToken(user._id);
 
     const loggedInUser = await User.findById(user._id).select(
         "-password -refreshToken"

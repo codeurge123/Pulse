@@ -86,6 +86,7 @@ export default function SignIn() {
                 // eska through toast animation lekar aya ga
                 toast.success(res.data.message)
                 navigate("/");
+                localStorage.setItem("auth_provider", "jwt");
                 dispatch(getUser(res?.data?.data?.loggedInUser))
                 // console.log(res.data.data.loggedInUser) // --> just for testing
                 // console.log(res.data.data.loggedInUser._id) // --> just for testing
@@ -187,6 +188,7 @@ export default function SignIn() {
             <button
                 onClick={() => {
                     // console.log("clicked")
+                    localStorage.setItem("auth_provider", "auth0");
                     loginWithRedirect({
                         authorizationParams: {
                             connection: "google-oauth2"

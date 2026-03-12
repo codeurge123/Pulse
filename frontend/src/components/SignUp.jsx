@@ -210,12 +210,14 @@ export default function SignUp() {
             </div>
 
             <button
-                onClick={() =>
+                onClick={() => {
+                    localStorage.setItem("auth_provider", "auth0");
                     loginWithRedirect({
                         authorizationParams: {
                             connection: "google-oauth2"
                         }
                     })
+                }
                 }
                 className="border py-3 rounded-lg w-full hover:bg-gray-50 transition"
             >
