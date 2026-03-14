@@ -2,7 +2,7 @@ import { Router } from "express";
 import { upload } from "../middlewares/multer.middleware.js";
 import { RegisterUser, loginUser, logoutUser, getUserProfile, getOtherUser, follow, unfollow, updateUserDetails, auth0Login } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { verifyAuth0Token } from "../middlewares/auth0..middleware.js";
+import { verifyAuth0Token } from "../middlewares/auth0.middleware.js";
 
 
 const router = Router();
