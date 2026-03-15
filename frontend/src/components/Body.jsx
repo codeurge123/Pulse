@@ -13,6 +13,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Chat from "./Chat";
 import Follow from "./Follow";
 import EditProfile from "./EditProfile";
+import Chating from "./Chating";
 
 
 export default function Body() {
@@ -71,6 +72,14 @@ export default function Body() {
                     element: (
                         <ProtectedRoute>
                             <Chat />
+                        </ProtectedRoute>
+                    ),
+                },
+                {
+                    path: "/chat/:id",
+                    element: (
+                        <ProtectedRoute>
+                            <Chating />
                         </ProtectedRoute>
                     )
                 },

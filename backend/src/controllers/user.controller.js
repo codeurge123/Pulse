@@ -362,6 +362,19 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     )
 })
 
+const chatting = asyncHandler(async (req,res) => {
+    const id = req.params.id
+
+    const chattingUser = await User.findById(id).select(
+        "-password -refreshToken"
+    )
+
+    return res.status(200).json(
+        new ApiResponse(200,chattingUser,"chatting user fetched")
+    );
+
+})
 
 
-export { RegisterUser, loginUser, logoutUser, getUserProfile, getOtherUser, follow, unfollow, updateUserDetails, auth0Login }
+
+export { RegisterUser, loginUser, logoutUser, getUserProfile, getOtherUser, follow, unfollow, updateUserDetails, auth0Login, chatting }

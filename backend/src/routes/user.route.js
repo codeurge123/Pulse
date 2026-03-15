@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middlewares/multer.middleware.js";
-import { RegisterUser, loginUser, logoutUser, getUserProfile, getOtherUser, follow, unfollow, updateUserDetails, auth0Login } from "../controllers/user.controller.js";
+import { RegisterUser, loginUser, logoutUser, getUserProfile, getOtherUser, follow, unfollow, updateUserDetails, auth0Login, chatting } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAuth0Token } from "../middlewares/auth0.middleware.js";
 
@@ -28,6 +28,7 @@ router.route("/follow/:id").put(verifyJWT,follow)
 router.route("/unfollow/:id").put(verifyJWT,unfollow)
 router.route("/update-details").put(verifyJWT,updateUserDetails);
 router.route("/auth0-login").post(verifyAuth0Token, auth0Login);
+router.route("/chat/:id").get(verifyAuth0Token,chatting);
 
 
 export default router

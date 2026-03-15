@@ -2,17 +2,27 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { IoIosChatboxes } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import store from "../redux/store";
 import Avatar from "react-avatar";
 
 const Chat = () => {
 
     const { user, otherUsers } = useSelector(store => store.user);
+    const navigate = useNavigate();
 
     const followingUsers = otherUsers?.filter((u) =>
         user?.following?.includes(u._id)
     );
+
+    const followerUsers = otherUsers?.filter((u) => user?.followers?.includes(u?._id));
+
+    const commonUsers = followingUsers?.filter(fUser =>
+        followerUsers?.some(flUser => flUser._id === fUser._id)
+    );
+
+    
+
 
     return (
         <div className="w-[55%] min-h-screen border-x border-gray-200 relative left-80 bg-white">
@@ -43,7 +53,7 @@ const Chat = () => {
 
                 ) : (
 
-                    followingUsers?.map((following) => (
+                    commonUsers?.map((following) => (
 
                         <div
                             key={following?._id}
@@ -70,7 +80,9 @@ const Chat = () => {
 
                             </div>
 
-                            <button className="px-4 py-1.5 bg-black text-white text-sm font-semibold rounded-full hover:bg-gray-700 transition">
+                            <button
+                                onClick={() => navigate(`/chat/${following?._id}`)}
+                                className="px-4 py-1.5 bg-black text-white text-sm font-semibold rounded-full hover:bg-gray-700 transition">
                                 Chat
                             </button>
 

@@ -16,6 +16,12 @@ export default function CreatePost() {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
+    function handlePost(e) {
+        if(e.key === 'Enter'  && !e.shiftKey) {
+            e.preventDefault();
+            submitPost();
+        }
+    }
 
 
     const submitPost = async () => {
@@ -97,6 +103,7 @@ export default function CreatePost() {
                     <input
                         value={description}
                         onChange={e => setDescription(e.target.value)}
+                        onKeyDown={handlePost}
                         className="w-full outline-none border-none text-lg ml-4" type="text" placeholder="Write Something New ?!" />
                     <div className="mr-4">
                         <FiImage size="18px" />
