@@ -5,8 +5,9 @@
 ---
 
 ## 🌐 Live Demo
-🔗 Add your deployed link here
-https://drive.google.com/file/d/1_mRe8fQlF_FuJPysItbuY0shjLUAgmhg/view?usp=sharing
+
+    https://drive.google.com/file/d/1_mRe8fQlF_FuJPysItbuY0shjLUAgmhg/view?usp=sharing
+
 ---
 
 ## 📌 Overview
@@ -24,8 +25,7 @@ The platform integrates **real-time communication using Socket.io** and **AI-pow
 - ❤️ Like, bookmark, and interact with content  
 - 📰 Personalized **dynamic news feed**  
 - ⚡ **Real-time updates** using Socket.io  
-- 🤖 **AI-powered content suggestions (Pulse AI)**  
-- 📱 Fully responsive modern UI  
+- 🤖 **AI-powered content suggestions (Pulse AI)**    
 
 ---
 
@@ -55,6 +55,7 @@ The platform integrates **real-time communication using Socket.io** and **AI-pow
 ### Real-Time & AI
 - Socket.io  
 - Google Gemini API  
+- News API
 
 ---
 
