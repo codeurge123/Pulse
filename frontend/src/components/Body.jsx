@@ -14,6 +14,7 @@ import Chat from "./Chat";
 import Follow from "./Follow";
 import EditProfile from "./EditProfile";
 import Chating from "./Chating";
+import Explore from "./Explore";
 
 
 export default function Body() {
@@ -96,6 +97,14 @@ export default function Body() {
                     element: (
                         <ProtectedRoute>
                             <EditProfile />
+                        </ProtectedRoute>
+                    )
+                },
+                {
+                    path: "/explore",
+                    element: (
+                        <ProtectedRoute>
+                            <Explore />
                         </ProtectedRoute>
                     )
                 },

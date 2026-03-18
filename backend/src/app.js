@@ -59,8 +59,10 @@ io.on("connection", (socket) => {
 /* ROUTES */
 import userRouter from "./routes/user.route.js";
 import tweetRouter from "./routes/tweet.route.js";
+import newsRouter from "./routes/news.route.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/tweet", tweetRouter);
+app.use('/api/v1/news', newsRouter);
 
 export { app };

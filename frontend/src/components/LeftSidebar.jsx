@@ -74,12 +74,17 @@ const LeftSidebar = () => {
                     </div>
                     <h1 className="font-semibold text-lg ml-2">Home</h1>
                 </NavLink>
-                <div className="flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2">
+                <NavLink to="/explore"
+                    className={
+                        ({ isActive }) => (
+                            isActive ? "flex items-center my-2 bg-gray-100 rounded-full cursor-pointer px-4 py-2" : "flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2"
+                        )
+                    }>
                     <div>
                         <FiHash size="24px" />
                     </div>
                     <h1 className="font-semibold text-lg ml-2">Explore</h1>
-                </div>
+                </NavLink>
                 <div className="flex items-center my-2 hover:bg-gray-100 rounded-full cursor-pointer px-4 py-2">
                     <div>
                         <IoNotificationsOutline size="24px" />
@@ -153,9 +158,9 @@ const LeftSidebar = () => {
                     </div>
                     <h1 className="font-semibold text-lg ml-2">Logout</h1>
                 </NavLink>
-                <button 
-                onClick={PostHandler}
-                className="px-4 py-2 mt-4 border-none text-xl bg-[#1D9BF0] hover:bg-[#0591fc] w-full rounded-full text-white">Post</button>
+                <button
+                    onClick={PostHandler}
+                    className="px-4 py-2 mt-4 border-none text-xl bg-[#1D9BF0] hover:bg-[#0591fc] w-full rounded-full text-white">Post</button>
             </div>
         </div>
     )
